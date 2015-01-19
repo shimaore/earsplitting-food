@@ -1,0 +1,27 @@
+{
+  "name": "earsplitting-food",
+  "description": "Munin Plugin for `tough-rate` LCR engine",
+  "scripts": {
+    "test": "mocha"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/shimaore/earsplitting-food"
+  },
+  "keywords": [
+    "munin",
+    "LCR",
+    "tough-rate"
+  ],
+  "author": "Stéphane Alnet <stephane@shimaore.net> (http://stephane.shimaore.net/)",
+  "license": "Unlicense (http://unlicense.org/)",
+  "bugs": {
+    "url": "https://github.com/shimaore/earsplitting-food/issues"
+  },
+  "homepage": "https://github.com/shimaore/earsplitting-food"
+}
