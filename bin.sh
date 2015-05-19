@@ -23,9 +23,8 @@ EOT
   exit 0
 fi
 
-curl -s 'http://127.0.0.1:5704/statistics/incoming-calls' \
-  | jq -r '"incoming.value \(.count)"'
-curl -s 'http://127.0.0.1:5704/statistics/call-attempts' \
-  | jq -r '"attempts.value \(.count)"'
-curl -s 'http://127.0.0.1:5704/statistics/%5B"cause","SUCCESS"%5D' \
-  | jq -r '"success.value \(.count)"'
+curl -s 'http://127.0.0.1:5704/statistics' \
+  | jq -r '
+"incoming.value \(.["incoming-calls"].count)
+attempts.value \(.["call-attempts"].count)
+success.value \(.["connected-calls"].count)"'
