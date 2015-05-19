@@ -12,6 +12,7 @@ graph_vlabel cps
 graph_category voice
 incoming.label Calls
 incoming.type DERIVE
+incoming.min 0
 EOT
   exit 0
 fi
