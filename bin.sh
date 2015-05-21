@@ -13,12 +13,15 @@ graph_category voice
 incoming.label Calls
 incoming.type DERIVE
 incoming.min 0
+incoming.colour ffcc00
 attempts.label Attempts
 attempts.type DERIVE
 attempts.min 0
+attemps.colour 008f00
 success.label Success
 success.type DERIVE
 success.min 0
+success.colour 00cc00
 EOT
   exit 0
 fi
