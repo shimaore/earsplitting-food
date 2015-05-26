@@ -49,9 +49,26 @@ EOT
   exit 0
 fi
 
+if [ -z "${CARRIER}" ]; then
 curl -s 'http://127.0.0.1:5704/statistics' \
   | jq -r "
-\"
+\"\
+cause_CALL_REJECTED.value \(.[\"[\\\"cause-carrier\\\",\\\"CALL_REJECTED\\\",null]\"].count)
+cause_NORMAL_CLEARING.value \(.[\"[\\\"cause-carrier\\\",\\\"NORMAL_CLEARING\\\",null]\"].count)
+cause_NORMAL_TEMPORARY_FAILURE.value \(.[\"[\\\"cause-carrier\\\",\\\"NORMAL_TEMPORARY_FAILURE\\\",null]\"].count)
+cause_NO_ANSWER.value \(.[\"[\\\"cause-carrier\\\",\\\"NO_ANSWER\\\",null]\"].count)
+cause_NO_USER_RESPONSE.value \(.[\"[\\\"cause-carrier\\\",\\\"NO_USER_RESPONSE\\\",null]\"].count)
+cause_ORIGINATOR_CANCEL.value \(.[\"[\\\"cause-carrier\\\",\\\"ORIGINATOR_CANCEL\\\",null]\"].count)
+cause_PROGRESS_TIMEOUT.value \(.[\"[\\\"cause-carrier\\\",\\\"PROGRESS_TIMEOUT\\\",null]\"].count)
+cause_RECOVERY_ON_TIMER_EXPIRE.value \(.[\"[\\\"cause-carrier\\\",\\\"RECOVERY_ON_TIMER_EXPIRE\\\",null]\"].count)
+cause_SUCCESS.value \(.[\"[\\\"cause-carrier\\\",\\\"SUCCESS\\\",null]\"].count)
+cause_UNALLOCATED_NUMBER.value \(.[\"[\\\"cause-carrier\\\",\\\"UNALLOCATED_NUMBER\\\",null]\"].count)
+cause_USER_BUSY.value \(.[\"[\\\"cause-carrier\\\",\\\"USER_BUSY\\\",null]\"].count)
+\""
+else
+curl -s 'http://127.0.0.1:5704/statistics' \
+  | jq -r "
+\"\
 cause_CALL_REJECTED.value \(.[\"[\\\"cause-carrier\\\",\\\"CALL_REJECTED\\\",\\\"${CARRIER}\\\"]\"].count)
 cause_NORMAL_CLEARING.value \(.[\"[\\\"cause-carrier\\\",\\\"NORMAL_CLEARING\\\",\\\"${CARRIER}\\\"]\"].count)
 cause_NORMAL_TEMPORARY_FAILURE.value \(.[\"[\\\"cause-carrier\\\",\\\"NORMAL_TEMPORARY_FAILURE\\\",\\\"${CARRIER}\\\"]\"].count)
@@ -64,3 +81,4 @@ cause_SUCCESS.value \(.[\"[\\\"cause-carrier\\\",\\\"SUCCESS\\\",\\\"${CARRIER}\
 cause_UNALLOCATED_NUMBER.value \(.[\"[\\\"cause-carrier\\\",\\\"UNALLOCATED_NUMBER\\\",\\\"${CARRIER}\\\"]\"].count)
 cause_USER_BUSY.value \(.[\"[\\\"cause-carrier\\\",\\\"USER_BUSY\\\",\\\"${CARRIER}\\\"]\"].count)
 \""
+fi
