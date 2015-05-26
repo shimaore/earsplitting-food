@@ -1,0 +1,66 @@
+#!/bin/bash
+
+if [ "$1" == 'autoconf' ]; then
+  echo 'yes'
+  exit
+fi
+
+CARRIER=${0##*tough-rate-causes_}
+
+if [ "$1" == 'config' ]; then
+  cat <<EOT
+graph_title Causes for $CARRIER
+graph_vlabel Calls
+graph_category voice
+cause_CALL_REJECTED.label Rejected
+cause_NORMAL_CLEARING.label Normal
+cause_NORMAL_TEMPORARY_FAILURE.label Error
+cause_NO_ANSWER.label No Answer
+cause_NO_USER_RESPONSE.label No Response
+cause_ORIGINATOR_CANCEL.label CANCEL
+cause_PROGRESS_TIMEOUT.label Progress Timeout
+cause_RECOVERY_ON_TIMER_EXPIRE.label Carrier failure
+cause_SUCCESS.label Success
+cause_UNALLOCATED_NUMBER.label Unallocated
+cause_USER_BUSY.label Busy
+cause_CALL_REJECTED.type DERIVE
+cause_NORMAL_CLEARING.type DERIVE
+cause_NORMAL_TEMPORARY_FAILURE.type DERIVE
+cause_NO_ANSWER.type DERIVE
+cause_NO_USER_RESPONSE.type DERIVE
+cause_ORIGINATOR_CANCEL.type DERIVE
+cause_PROGRESS_TIMEOUT.type DERIVE
+cause_RECOVERY_ON_TIMER_EXPIRE.type DERIVE
+cause_SUCCESS.type DERIVE
+cause_UNALLOCATED_NUMBER.type DERIVE
+cause_USER_BUSY.type DERIVE
+cause_CALL_REJECTED.min 0
+cause_NORMAL_CLEARING.min 0
+cause_NORMAL_TEMPORARY_FAILURE.min 0
+cause_NO_ANSWER.min 0
+cause_NO_USER_RESPONSE.min 0
+cause_ORIGINATOR_CANCEL.min 0
+cause_PROGRESS_TIMEOUT.min 0
+cause_RECOVERY_ON_TIMER_EXPIRE.min 0
+cause_SUCCESS.min 0
+cause_UNALLOCATED_NUMBER.min 0
+cause_USER_BUSY.min 0
+EOT
+  exit 0
+fi
+
+curl -s 'http://127.0.0.1:5704/statistics' \
+  | jq -r "
+\"
+cause_CALL_REJECTED.value \(.[\"[\\\"cause-carrier\\\",\\\"CALL_REJECTED\\\",\\\"${CARRIER}\\\"]\"].count)
+cause_NORMAL_CLEARING.value \(.[\"[\\\"cause-carrier\\\",\\\"NORMAL_CLEARING\\\",\\\"${CARRIER}\\\"]\"].count)
+cause_NORMAL_TEMPORARY_FAILURE.value \(.[\"[\\\"cause-carrier\\\",\\\"NORMAL_TEMPORARY_FAILURE\\\",\\\"${CARRIER}\\\"]\"].count)
+cause_NO_ANSWER.value \(.[\"[\\\"cause-carrier\\\",\\\"NO_ANSWER\\\",\\\"${CARRIER}\\\"]\"].count)
+cause_NO_USER_RESPONSE.value \(.[\"[\\\"cause-carrier\\\",\\\"NO_USER_RESPONSE\\\",\\\"${CARRIER}\\\"]\"].count)
+cause_ORIGINATOR_CANCEL.value \(.[\"[\\\"cause-carrier\\\",\\\"ORIGINATOR_CANCEL\\\",\\\"${CARRIER}\\\"]\"].count)
+cause_PROGRESS_TIMEOUT.value \(.[\"[\\\"cause-carrier\\\",\\\"PROGRESS_TIMEOUT\\\",\\\"${CARRIER}\\\"]\"].count)
+cause_RECOVERY_ON_TIMER_EXPIRE.value \(.[\"[\\\"cause-carrier\\\",\\\"RECOVERY_ON_TIMER_EXPIRE\\\",\\\"${CARRIER}\\\"]\"].count)
+cause_SUCCESS.value \(.[\"[\\\"cause-carrier\\\",\\\"SUCCESS\\\",\\\"${CARRIER}\\\"]\"].count)
+cause_UNALLOCATED_NUMBER.value \(.[\"[\\\"cause-carrier\\\",\\\"UNALLOCATED_NUMBER\\\",\\\"${CARRIER}\\\"]\"].count)
+cause_USER_BUSY.value \(.[\"[\\\"cause-carrier\\\",\\\"USER_BUSY\\\",\\\"${CARRIER}\\\"]\"].count)
+\""
