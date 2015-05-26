@@ -3,7 +3,7 @@
   "description": "Munin Plugin for `tough-rate` LCR engine",
   "scripts": {
     "test": "mocha"
-  , "install": "cp bin.sh /etc/munin/plugins/tough-rate-calls"
+  , "install": "cp tough-rate-calls /etc/munin/plugins/"
   },
   "version": "1.0.0",
   "main": "index.js",
