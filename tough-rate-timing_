@@ -10,23 +10,23 @@ CARRIER=${0##*tough-rate-timing_}
 if [ "$1" == 'config' ]; then
   cat <<EOT
 graph_title Timings for $CARRIER
-graph_vlabel Duration
+graph_vlabel Duration (s)
 graph_category voice
 graph_args --logarithmic
 duration.label Duration
-duration.cdef sum_duration,count_duration,/
+duration.cdef sum_duration,1000,/,count_duration,/
 billable.label Billable
-billable.cdef sum_billable,count_billable,/
+billable.cdef sum_billable,1000,/,count_billable,/
 answer.label Answer
-answer.cdef sum_answer,count_answer,/
+answer.cdef sum_answer,1000,/,count_answer,/
 progress_media.label ProgressMedia
-progress_media.cdef sum_progress_media,count_progress_media,/
+progress_media.cdef sum_progress_media,1000,/,count_progress_media,/
 flow_bill.label FlowBill
-flow_bill.cdef sum_flow_bill,count_flow_bill,/
+flow_bill.cdef sum_flow_bill,1000,/,count_flow_bill,/
 wait.label Wait
-wait.cdef sum_wait,count_wait,/
+wait.cdef sum_wait,1000,/,count_wait,/
 progress.label Progress
-progress.cdef sum_progress,count_progress,/
+progress.cdef sum_progress,1000,/,count_progress,/
 count_duration.graph no
 count_billable.graph no
 count_progress.graph no
