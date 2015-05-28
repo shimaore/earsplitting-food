@@ -1,0 +1,100 @@
+#!/bin/bash
+
+if [ "$1" == 'autoconf' ]; then
+  echo 'yes'
+  exit
+fi
+
+CARRIER=${0##*tough-rate-timing_}
+
+if [ "$1" == 'config' ]; then
+  cat <<EOT
+graph_title Timings for $CARRIER
+graph_vlabel Duration
+graph_category voice
+graph_args --logarithmic
+duration.label Duration
+duration.cdef sum_duration,count_duration,/
+billable.label Billable
+billable.cdef sum_billable,count_billable,/
+answer.label Answer
+answer.cdef sum_answer,count_answer,/
+progress_media.label ProgressMedia
+progress_media.cdef sum_progress_media,count_progress_media,/
+flow_bill.label FlowBill
+flow_bill.cdef sum_flow_bill,count_flow_bill,/
+wait.label Wait
+wait.cdef sum_wait,count_wait,/
+progress.label Progress
+progress.cdef sum_progress,count_progress,/
+count_duration.graph no
+count_billable.graph no
+count_progress.graph no
+count_answer.graph no
+count_wait.graph no
+count_progress_media.graph no
+count_flow_bill.graph no
+sum_duration.graph no
+sum_billable.graph no
+sum_progress.graph no
+sum_answer.graph no
+sum_wait.graph no
+sum_progress_media.graph no
+sum_flow_bill.graph no
+count_duration.type DERIVE
+count_billable.type DERIVE
+count_progress.type DERIVE
+count_answer.type DERIVE
+count_wait.type DERIVE
+count_progress_media.type DERIVE
+count_flow_bill.type DERIVE
+sum_duration.type DERIVE
+sum_billable.type DERIVE
+sum_progress.type DERIVE
+sum_answer.type DERIVE
+sum_wait.type DERIVE
+sum_progress_media.type DERIVE
+sum_flow_bill.type DERIVE
+count_duration.min 0
+count_billable.min 0
+count_progress.min 0
+count_answer.min 0
+count_wait.min 0
+count_progress_media.min 0
+count_flow_bill.min 0
+sum_duration.min 0
+sum_billable.min 0
+sum_progress.min 0
+sum_answer.min 0
+sum_wait.min 0
+sum_progress_media.min 0
+sum_flow_bill.min 0
+EOT
+  exit 0
+fi
+
+if [ -z "${CARRIER}" ]; then
+  CARRIER=null
+else
+  CARRIER="\\\"${CARRIER}\\\""
+fi
+curl -s 'http://127.0.0.1:5704/statistics' \
+  | jq -r "
+\"\
+count_duration.value \(.[\"[\\\"duration-carrier\\\",${CARRIER}]\"].count)
+count_duration.value \(.[\"[\\\"duration-carrier\\\",${CARRIER}]\"].count)
+count_billable.value \(.[\"[\\\"billable-carrier\\\",${CARRIER}]\"].count)
+count_progress.value \(.[\"[\\\"progress-carrier\\\",${CARRIER}]\"].count)
+count_answer.value \(.[\"[\\\"answer-carrier\\\",${CARRIER}]\"].count)
+count_wait.value \(.[\"[\\\"wait-carrier\\\",${CARRIER}]\"].count)
+count_progress_media.value \(.[\"[\\\"progress_media-carrier\\\",${CARRIER}]\"].count)
+count_flow_bill.value \(.[\"[\\\"flow_bill-carrier\\\",${CARRIER}]\"].count)
+sum_duration.value \(.[\"[\\\"duration-carrier\\\",${CARRIER}]\"].sum)
+sum_duration.value \(.[\"[\\\"duration-carrier\\\",${CARRIER}]\"].sum)
+sum_billable.value \(.[\"[\\\"billable-carrier\\\",${CARRIER}]\"].sum)
+sum_progress.value \(.[\"[\\\"progress-carrier\\\",${CARRIER}]\"].sum)
+sum_answer.value \(.[\"[\\\"answer-carrier\\\",${CARRIER}]\"].sum)
+sum_wait.value \(.[\"[\\\"wait-carrier\\\",${CARRIER}]\"].sum)
+sum_progress_media.value \(.[\"[\\\"progress_media-carrier\\\",${CARRIER}]\"].sum)
+sum_flow_bill.value \(.[\"[\\\"flow_bill-carrier\\\",${CARRIER}]\"].sum)
+\""
