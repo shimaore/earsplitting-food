@@ -8,20 +8,25 @@ fi
 CARRIER=${0##*tough-rate-csr_}
 
 if [ "$1" == 'config' ]; then
+  # RPN doc: http://oss.oetiker.ch/rrdtool/doc/rrdgraph_rpn.en.html
+  # esp: `A,B,C,IF` should be read as `if (A) then (B) else (C)`
   cat <<EOT
 graph_title CSR for $CARRIER
-graph_vlabel CSR
+graph_vlabel CSR (%)
 graph_category voice
+graph_scale off
 csr.label Call Success Rate
 csr.type ABSOLUTE
 csr.min 0
+csr.max 100
 csr.colour ffcc00
-csr.cdef success,attempts,1,attempts,0,EQ,IF,/,100,*,UNKN,attempts,0,EQ,IF,UNKN,attempts,UNKN,EQ,IF
-
+csr.cdef attempts,0,EQ,UNKN,success,attempts,0,EQ,1,attempts,IF,/,100,*,IF
 attempts.label not_used
+attempts.graph no
 attempts.type DERIVE
 attempts.min 0
 success.label not_used
+success.graph no
 success.type DERIVE
 success.min 0
 EOT
@@ -30,5 +35,6 @@ fi
 
 curl -s 'http://127.0.0.1:5704/statistics' \
   | jq -r "
-\"attempts.value \(.[\"call-attempts\"].count)
-success.value \(.["connected-calls"].count)\""
+\"attempts.value \(.[\"[\\\"call-attempts-carrier\\\",\\\"${CARRIER}\\\"]\"].count)
+success.value \(.[\"[\\\"connected-calls-carrier\\\",\\\"${CARRIER}\\\"]\"].count)
+\""
